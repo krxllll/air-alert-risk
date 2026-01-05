@@ -1,0 +1,39 @@
+# OS / Editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.env
+
+# Node / Vite
+node_modules/
+dist/
+.cache/
+.pnpm-store/
+
+# Environment variables
+.env.local
+.env.development
+.env.production
+.env.test
+!.env.example
+
+# Build / Runtime
+coverage/
+htmlcov/
+
+# Misc
+*.sqlite3
+
+# Data files
+data/*.json
+data/alerts_meta/
+datasets/*.csv
