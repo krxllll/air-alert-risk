@@ -34,6 +34,6 @@ htmlcov/
 *.sqlite3
 
 # Data files
-data/*.json
-data/alerts_meta/
+data/runtime/snapshots/*.json
+data/runtime/http_cache/*.txt
 datasets/*.csv

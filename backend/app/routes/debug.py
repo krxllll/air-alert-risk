@@ -5,22 +5,22 @@ import json
 from time import time
 from fastapi import APIRouter, HTTPException
 from ..cache import cache
-from ..storage import BY_OBLAST_SNAPSHOT_PATH
+from ..storage import BY_OBLAST_SNAPSHOT_FILE
 
 router = APIRouter(prefix="/debug", tags=["debug"])
 
 
 @router.get("/snapshot/by_oblast")
 def snapshot_by_oblast_info():
-    if not os.path.exists(BY_OBLAST_SNAPSHOT_PATH):
+    if not os.path.exists(BY_OBLAST_SNAPSHOT_FILE):
         return {
             "ready": False,
-            "path": BY_OBLAST_SNAPSHOT_PATH,
+            "path": BY_OBLAST_SNAPSHOT_FILE,
             "reason": "file_not_found",
         }
 
     try:
-        with open(BY_OBLAST_SNAPSHOT_PATH, "r", encoding="utf-8") as f:
+        with open(BY_OBLAST_SNAPSHOT_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         updated_at = data.get("updated_at")
@@ -28,7 +28,7 @@ def snapshot_by_oblast_info():
 
         return {
             "ready": True,
-            "path": BY_OBLAST_SNAPSHOT_PATH,
+            "path": BY_OBLAST_SNAPSHOT_FILE,
             "updated_at": updated_at,
             "age_seconds": age_seconds,
             "source": data.get("source"),
