@@ -89,3 +89,31 @@ def bins_head(uid: int, limit: int = 50):
             rows = cur.fetchall()
 
     return [{"ts": r[0].isoformat(), "is_alarm": int(r[1])} for r in rows]
+
+
+@router.get("/oblast/{uid}/forecast_head")
+def forecast_head(uid: int, model_version: str = "sarimax_v1_hourly", limit: int = 50):
+    limit = max(1, min(limit, 500))
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT ts, p_alarm, model_version, created_at
+                FROM alarm_forecasts_hourly
+                WHERE oblast_uid=%s AND model_version=%s
+                ORDER BY ts
+                LIMIT %s
+                """,
+                (uid, model_version, limit),
+            )
+            rows = cur.fetchall()
+
+    return [
+        {
+            "ts": r[0].isoformat(),
+            "p_alarm": float(r[1]),
+            "model_version": r[2],
+            "created_at": r[3].isoformat(),
+        }
+        for r in rows
+    ]

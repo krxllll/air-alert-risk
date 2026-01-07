@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from .. import alerts_client
 from ..ua_oblasts import OBLASTS_ORDERED, decode_by_oblast_char
 from ..cache import cache
-from ..storage import BY_OBLAST_SNAPSHOT_PATH
+from ..storage import BY_OBLAST_SNAPSHOT_FILE
 from ..snapshot import read_by_oblast_snapshot
 
 router = APIRouter(prefix="/ua", tags=["ukraine"])
@@ -105,7 +105,8 @@ async def oblast_statuses_live():
 @router.get("/alerts/oblasts/status/{uid}")
 async def oblast_status(uid: int):
     statuses = await oblast_statuses()
-    for item in statuses:
+    items = statuses["items"] if isinstance(statuses, dict) else statuses
+    for item in items:
         if item["uid"] == uid:
             return item
     raise HTTPException(status_code=404, detail="Unknown oblast uid")
@@ -113,11 +114,11 @@ async def oblast_status(uid: int):
 
 @router.get("/alerts/oblasts/statuses_snapshot")
 def oblast_statuses_snapshot():
-    if not os.path.exists(BY_OBLAST_SNAPSHOT_PATH):
+    if not os.path.exists(BY_OBLAST_SNAPSHOT_FILE):
         raise HTTPException(status_code=503, detail="Snapshot not ready yet")
 
     try:
-        with open(BY_OBLAST_SNAPSHOT_PATH, "r", encoding="utf-8") as f:
+        with open(BY_OBLAST_SNAPSHOT_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

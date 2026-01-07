@@ -22,10 +22,12 @@ def main(csv_path: str) -> None:
             with open(csv_path, "r", encoding="utf-8", newline="") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
-                    if row.get("level") != "oblast":
-                        continue
-
                     oblast_name = row.get("oblast")
+                    raion_name = row.get("raion")
+
+                    if oblast_name == "Лубенський район" and raion_name in NAME_TO_UID:
+                        oblast_name = raion_name
+
                     if not oblast_name:
                         skipped += 1
                         continue

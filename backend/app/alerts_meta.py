@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-META_DIR = Path(os.getenv("SNAPSHOT_DIR", "/data")) / "alerts_meta"
+META_DIR = Path(os.getenv("HTTP_CACHE_DIR", "/data/runtime/http_cache"))
 META_DIR.mkdir(parents=True, exist_ok=True)
 
 def _safe_name(key: str) -> str:

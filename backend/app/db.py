@@ -38,4 +38,18 @@ def init_db() -> None:
               PRIMARY KEY (oblast_uid, ts)
             );
             """)
+            cur.execute("""
+            CREATE TABLE IF NOT EXISTS alarm_forecasts_hourly (
+              oblast_uid INT NOT NULL,
+              ts TIMESTAMPTZ NOT NULL,
+              p_alarm DOUBLE PRECISION NOT NULL,
+              model_version TEXT NOT NULL,
+              created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+              PRIMARY KEY (oblast_uid, ts, model_version)
+            );
+            """)
+            cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_alarm_forecasts_hourly_uid_ts
+            ON alarm_forecasts_hourly (oblast_uid, ts);
+            """)
             conn.commit()

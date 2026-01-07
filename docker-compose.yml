@@ -4,6 +4,8 @@ services:
     container_name: air-alert-backend
     env_file:
       - .env
+    environment:
+      PYTHONPATH: /app
     volumes:
       - ./backend:/app
       - ./data:/data
@@ -19,6 +21,8 @@ services:
     container_name: air-alert-worker
     env_file:
       - .env
+    environment:
+      PYTHONPATH: /app
     volumes:
       - ./backend:/app
       - ./data:/data
